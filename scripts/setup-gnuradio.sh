@@ -5,26 +5,40 @@ set -eux
 export LANG=en_US.UTF-8
 export PATH="$HOME/.local/bin:${PATH}"
 
-echo "gnuradio - rtprio 99" | sudo tee -a /etc/security/limits.conf
+cd
 sudo mv 90-usrp.conf /etc/sysctl.d/
 sudo apt update
 
+<<<<<<< HEAD
 sudo apt -y install ipython python-matplotlib python-ipython python-scipy python-numpy python-pip python-qwt5-qt4 python-wxgtk3.0 multimon sox
 
 ### PYBOMBS
 pip install pybombs
+=======
+cd
+echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib' >> .profile
+echo 'export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3/dist-packages' >> .profile
+echo 'export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3/site-packages' >> .profile
+echo 'export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.8/dist-packages' >> .profile
+echo 'export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.8/site-packages' >> .profile
 
-pybombs -v recipes add gr-recipes git+https://github.com/gnuradio/gr-recipes.git
-pybombs -v recipes add gr-etcetera git+https://github.com/gnuradio/gr-etcetera.git
+cd /tmp
+sudo mkdir /tmp/isomount
+sudo mount -t iso9660 -o loop /home/gnuradio/VBoxGuestAdditions.iso /tmp/isomount
 
-mkdir -p /home/gnuradio/pybombs
-pybombs prefix init /home/gnuradio/pybombs -a master
-pybombs config default_prefix master
-echo 'PATH="$HOME/.local/bin:${PATH}"' >> .zshrc
-echo 'PATH="$HOME/.local/bin:${PATH}"' >> .bashrc
-echo "source /home/gnuradio/pybombs/setup_env.sh" >> .zshrc
-echo "source /home/gnuradio/pybombs/setup_env.sh" >> .bashrc
+# Install the drivers
+yes | sudo /tmp/isomount/VBoxLinuxAdditions.run || echo
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42
 
+# Cleanup
+sudo umount isomount
+sudo rm -rf isomount /home/gnuradio/VBoxGuestAdditions.iso
+
+echo "gnuradio - rtprio 99" | sudo tee -a /etc/security/limits.conf
+sudo apt-get update
+sudo apt-get -y upgrade
+
+<<<<<<< HEAD
 ### LIBIIO
 pybombs config --package libiio gitrev master
 echo -e "      vars:\n        config_opt: ' -DWITH_IIOD:BOOL=OFF -DINSTALL_UDEV_RULE:BOOL=OFF '" >> /home/gnuradio/.pybombs/config.yml
@@ -94,20 +108,32 @@ pybombs -v install uhd
 sudo cp pybombs/src/uhd/host/utils/uhd-usrp.rules /etc/udev/rules.d/
 pybombs/lib/uhd/utils/uhd_images_downloader.py
 pybombs -v install soapyuhd
+=======
+sudo apt-get -y install jupyter jupyter-qtconsole jupyter-notebook python3-matplotlib python3-ipython python3-scipy python3-numpy python3-pip multimon sox liborc-dev swig3.0
 
-### GNU RADIO
-pybombs -v install gnuradio
-/home/gnuradio/pybombs/libexec/gnuradio/grc_setup_freedesktop install
-rm -rf ~/.gnome/apps/gnuradio-grc.desktop
-rm -rf ~/.local/share/applications/gnuradio-grc.desktop
-mv gnuradio-grc.desktop .local/share/applications/gnuradio-grc.desktop
+sudo add-apt-repository -y ppa:gnuradio/gnuradio-releases
+sudo add-apt-repository -y ppa:mormj/gnuradio-oot3
+sudo apt-get update
 
+sudo apt-get -y install gr-fcdproplus gr-fosphor gr-iqbal gr-limesdr gr-osmosdr
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42
+
+sudo apt-get -y install gqrx-sdr inspectrum
+
+<<<<<<< HEAD
 ### GR IIO
 pybombs -v install gr-iio
+=======
+sudo snap install urh
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42
 
-### GR OSMOSDR
-pybombs -v install gr-osmosdr
+sudo usermod -aG usrp gnuradio
+sudo apt-get -y install clinfo mesa-utils
+sudo usermod -aG video gnuradio
+sudo usermod -aG dialout gnuradio
+sudo usermod -aG lpadmin gnuradio
 
+<<<<<<< HEAD
 ### GQRX
 pybombs -v install gqrx
 xdg-icon-resource install --context apps --novendor --size 96 Pictures/gqrx-icon.png
@@ -116,19 +142,17 @@ xdg-icon-resource install --context apps --novendor --size 96 Pictures/gqrx-icon
 sudo apt-get -y install libfreetype6-dev ocl-icd-opencl-dev python-opengl lsb-core
 pybombs -v install gr-fosphor
 xdg-icon-resource install --context apps --novendor --size 96 Pictures/fosphor-icon.png
+=======
+sudo apt-get -y install intel-opencl-icd lsb-core
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42
 
-cd Downloads
-tar xvf opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz
-sudo opencl_runtime_16.1.2_x64_rh_6.4.0.37/install.sh -s opencl-silent.cfg
-cd ~/pybombs/src/gr-fosphor/build
-set +u
-source /home/gnuradio/pybombs/setup_env.sh
-set -u
-cmake -DOpenCL_LIBRARY=/opt/intel/opencl-1.2-6.4.0.37/lib64/libOpenCL.so ..
-make
-make install
-cd
+sudo /usr/lib/uhd/utils/uhd_images_downloader.py
 
+cd ~/Downloads
+tar xvf l_opencl_p_18.1.0.015.tgz
+sudo l_opencl_p_18.1.0.015/install.sh -s opencl-silent.cfg
+
+<<<<<<< HEAD
 pybombs -v install gr-foo
 pybombs -v install gr-ieee-80211
 pybombs -v install gr-ieee-802154
@@ -172,6 +196,18 @@ find ./pybombs -type d -name 'build' | xargs rm -rf
 
 ### FAVORITE APPLICATIONS
 xvfb-run dconf write /org/gnome/shell/favorite-apps "['gnuradio-grc.desktop', 'gqrx.desktop', 'fosphor.desktop', 'inspectrum.desktop', 'urh.desktop', 'terminator.desktop', 'gnuradio-web.desktop', 'firefox.desktop', 'org.gnome.Nautilus.desktop']"
+=======
+cd
+xdg-icon-resource install --context apps --novendor --size 96 Pictures/gqrx-icon.png
+xdg-icon-resource install --context apps --novendor --size 96 Pictures/inspectrum-icon.png
+xdg-icon-resource install --context apps --novendor --size 96 Pictures/fosphor-icon.png
+xdg-icon-resource install --context apps --novendor --size 96 Pictures/urhpng.png
+
+rm -rf Downloads/*
+
+### FAVORITE APPLICATIONS
+xvfb-run dconf write /org/gnome/shell/favorite-apps "['gnuradio-grc.desktop', 'gqrx.desktop', 'fosphor.desktop', 'inspectrum.desktop', 'urh.desktop', 'terminator.desktop', 'code_code.desktop', 'gnuradio-web.desktop', 'firefox.desktop', 'org.gnome.Nautilus.desktop']"
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42
 
 ### The German Code
 # xvfb-run dconf write /org/gnome/desktop/input-sources/sources "[('xkb', 'de')]"

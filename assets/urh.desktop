@@ -2,5 +2,10 @@
 Type=Application
 Name=Universal Radio Hacker
 Comment=Software for investigating unknown wireless protocols
+<<<<<<< HEAD
 Exec=/bin/bash -c "source /home/gnuradio/pybombs/setup_env.sh && urh"
 Icon=urhpng
+=======
+Exec=/snap/bin/urh
+Icon=urhpng
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42

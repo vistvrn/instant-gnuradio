@@ -27,13 +27,27 @@
     },
     {
       "type": "file",
-      "source": "assets/opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz",
-      "destination": "Downloads/opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz"
+      "source": "assets/90-usrp.conf",
+      "destination": "90-usrp.conf"
+    },
+    {
+      "type": "file",
+      "source": "assets/l_opencl_p_18.1.0.015.tgz",
+      "destination": "Downloads/l_opencl_p_18.1.0.015.tgz"
     },
     {
       "type": "file",
       "source": "assets/opencl-silent.cfg",
       "destination": "Downloads/opencl-silent.cfg"
+    },
+    {
+      "type": "shell",
+      "inline": ["mkdir ~/.gnuradio"]
+    },
+    {
+      "type": "file",
+      "source": "assets/config.conf",
+      "destination": ".gnuradio/config.conf"
     },
     {
       "type": "file",
@@ -52,8 +66,13 @@
     },
     {
       "type": "file",
+<<<<<<< HEAD
       "source": "assets/gnuradio-grc.desktop",
       "destination": "gnuradio-grc.desktop"
+=======
+      "source": "assets/urh.desktop",
+      "destination": ".local/share/applications/urh.desktop"
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42
     },
     {
       "type": "file",
@@ -84,11 +103,14 @@
       "type": "file",
       "source": "assets/urhpng.png",
       "destination": "Pictures/urhpng.png"
+<<<<<<< HEAD
     },
     {
       "type": "file",
       "source": "assets/90-usrp.conf",
       "destination": "90-usrp.conf"
+=======
+>>>>>>> 4028291728e88cf99dc7aa84ce376c3d28be6e42
     },
     {
       "type": "shell",
